@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:revenda_gas/app/detail/detail_page.dart';
 import 'package:revenda_gas/app/home/home_page.dart';
 
 class MainApp extends StatelessWidget {
@@ -8,6 +9,9 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Revenda Gás',
       home: HomePage(),
+      routes: {
+        DetailPage.routerName: (_) => DetailPage()
+      },
     );
   }
 }

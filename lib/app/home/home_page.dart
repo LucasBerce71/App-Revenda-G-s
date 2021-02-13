@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:revenda_gas/app/detail/detail_page.dart';
 import 'package:revenda_gas/app/home/components/tag_best_price.dart';
 
 class HomePage extends StatefulWidget {
@@ -45,9 +46,9 @@ class _HomePageState extends State<HomePage> {
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Text(
-                  '?', 
+                  '?',
                   style: TextStyle(
-                    color: Colors.white, 
+                    color: Colors.white,
                     fontSize: 30,
                   ),
                 ),
@@ -128,139 +129,142 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildRevenda(int index) {
-    return Container(
-      margin: EdgeInsets.all(15),
-      width: MediaQuery.of(context).size.width,
-      height: 120,
-      child: Row(
-        children: <Widget>[
-          Container(
-            width: 40,
-            height: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(5),
-                bottomLeft: Radius.circular(5),
-              ),
-            ),
-            child: RotatedBox(
-              child: Center(
-                child: Text(
-                  'Multimarcas',
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
+    return InkWell(
+      onTap: () => Navigator.pushNamed(context, DetailPage.routerName),
+      child: Container(
+        margin: EdgeInsets.all(15),
+        width: MediaQuery.of(context).size.width,
+        height: 120,
+        child: Row(
+          children: <Widget>[
+            Container(
+              width: 40,
+              height: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(5),
+                  bottomLeft: Radius.circular(5),
                 ),
               ),
-              quarterTurns: -1,
-            ),
-          ),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.only(top: 10, left: 10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(5),
-                    bottomRight: Radius.circular(5)),
-              ),
-              child: Column(
-                children: <Widget>[
-                  Expanded(
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(child: Text('Unigas')),
-                        TagBestPrice()
-                      ],
-                    ),
+              child: RotatedBox(
+                child: Center(
+                  child: Text(
+                    'Multimarcas',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              'Nota',
-                              style:
-                                  TextStyle(fontSize: 13, color: Colors.grey),
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Row(
-                              children: <Widget>[
-                                Text(
-                                  '4.5',
-                                  style: TextStyle(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Icon(
-                                  Icons.star,
-                                  color: Colors.yellow,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: <Widget>[
-                            Text(
-                              'Tempo Médio',
-                              style:
-                                  TextStyle(fontSize: 13, color: Colors.grey),
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                  style: TextStyle(color: Colors.black),
-                                  children: [
-                                    TextSpan(
-                                      text: '30-45',
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    TextSpan(
-                                      text: 'min',
-                                      style: TextStyle(
-                                          fontSize: 10, color: Colors.grey),
-                                    ),
-                                  ]),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              'Preço',
-                              style:
-                                  TextStyle(fontSize: 13, color: Colors.grey),
-                            ),
-                            SizedBox(
-                              height: 8,
-                            ),
-                            Text(
-                              'R\$ 74,90',
-                              style: TextStyle(
-                                  fontSize: 23, fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                ),
+                quarterTurns: -1,
               ),
             ),
-          ),
-        ],
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.only(top: 10, left: 10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(5),
+                      bottomRight: Radius.circular(5)),
+                ),
+                child: Column(
+                  children: <Widget>[
+                    Expanded(
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(child: Text('Unigas')),
+                          TagBestPrice()
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Nota',
+                                style:
+                                    TextStyle(fontSize: 13, color: Colors.grey),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  Text(
+                                    '4.5',
+                                    style: TextStyle(
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Icon(
+                                    Icons.star,
+                                    color: Colors.yellow,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: <Widget>[
+                              Text(
+                                'Tempo Médio',
+                                style:
+                                    TextStyle(fontSize: 13, color: Colors.grey),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                    style: TextStyle(color: Colors.black),
+                                    children: [
+                                      TextSpan(
+                                        text: '30-45',
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      TextSpan(
+                                        text: 'min',
+                                        style: TextStyle(
+                                            fontSize: 10, color: Colors.grey),
+                                      ),
+                                    ]),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                'Preço',
+                                style:
+                                    TextStyle(fontSize: 13, color: Colors.grey),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Text(
+                                'R\$ 74,90',
+                                style: TextStyle(
+                                    fontSize: 23, fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
