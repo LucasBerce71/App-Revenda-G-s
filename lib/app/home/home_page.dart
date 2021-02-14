@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:revenda_gas/app/detail/detail_page.dart';
 import 'package:revenda_gas/app/home/components/tag_best_price.dart';
+import 'package:revenda_gas/app/model/resale_model.dart';
+import 'package:revenda_gas/app/repositories/resale_repository.dart';
+import 'package:revenda_gas/utils/formated_price.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -115,11 +118,28 @@ class _HomePageState extends State<HomePage> {
           ),
           SizedBox(height: 10),
           Expanded(
-            child: ListView.builder(
-              physics: BouncingScrollPhysics(),
-              itemCount: 10,
-              itemBuilder: (_, index) {
-                return _buildRevenda(index);
+            child: FutureBuilder<List<ResaleModel>>(
+              future: ResaleRepository().serachAllResale(),
+              builder: (_, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.none:
+                    return Container();
+                    break;
+                  case ConnectionState.waiting:
+                    return Center(child: CircularProgressIndicator());
+                    break;
+                  case ConnectionState.active:
+                  case ConnectionState.done:
+                    var data = snapshot.data;
+                    return ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      itemCount: data.length,
+                      itemBuilder: (_, index) {
+                        return _buildRevenda(data[index]);
+                      },
+                    );
+                    break;
+                }
               },
             ),
           ),
@@ -128,9 +148,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildRevenda(int index) {
+  Widget _buildRevenda(ResaleModel resale) {
     return InkWell(
-      onTap: () => Navigator.pushNamed(context, DetailPage.routerName),
+      onTap: () => Navigator.pushNamed(
+        context, 
+        DetailPage.routerName, 
+        arguments: resale
+      ),
       child: Container(
         margin: EdgeInsets.all(15),
         width: MediaQuery.of(context).size.width,
@@ -141,7 +165,7 @@ class _HomePageState extends State<HomePage> {
               width: 40,
               height: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.black,
+                color: Color(int.parse('FF${resale.color}', radix: 16)),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(5),
                   bottomLeft: Radius.circular(5),
@@ -150,7 +174,7 @@ class _HomePageState extends State<HomePage> {
               child: RotatedBox(
                 child: Center(
                   child: Text(
-                    'Multimarcas',
+                    resale.type,
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   ),
@@ -172,8 +196,11 @@ class _HomePageState extends State<HomePage> {
                     Expanded(
                       child: Row(
                         children: <Widget>[
-                          Expanded(child: Text('Unigas')),
-                          TagBestPrice()
+                          Expanded(child: Text(resale.name)),
+                          Visibility(
+                            visible: resale.bestPrice,
+                            child: TagBestPrice()
+                          ),
                         ],
                       ),
                     ),
@@ -196,7 +223,7 @@ class _HomePageState extends State<HomePage> {
                               Row(
                                 children: <Widget>[
                                   Text(
-                                    '4.5',
+                                    resale.note.toString(),
                                     style: TextStyle(
                                         fontSize: 25,
                                         fontWeight: FontWeight.bold),
@@ -224,7 +251,7 @@ class _HomePageState extends State<HomePage> {
                                     style: TextStyle(color: Colors.black),
                                     children: [
                                       TextSpan(
-                                        text: '30-45',
+                                        text: resale.averageTime,
                                         style: TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold),
@@ -250,7 +277,7 @@ class _HomePageState extends State<HomePage> {
                                 height: 8,
                               ),
                               Text(
-                                'R\$ 74,90',
+                                'R\$ ${formatedPrice(resale.price)}',
                                 style: TextStyle(
                                     fontSize: 23, fontWeight: FontWeight.bold),
                               ),

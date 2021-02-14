@@ -1,15 +1,31 @@
 import 'package:flutter/material.dart';
+
 import 'package:revenda_gas/app/components/bullet.dart';
+import 'package:revenda_gas/app/components/value_animation.dart';
+import 'package:revenda_gas/app/model/resale_model.dart';
 import 'package:revenda_gas/globals.dart';
+import 'package:revenda_gas/utils/formated_price.dart';
 
 class DetailPage extends StatefulWidget {
   static String routerName = '/detail';
+  final ResaleModel resale;
+
+  const DetailPage({
+    Key key,
+    @required this.resale,
+  }) : super(key: key);
 
   @override
-  _DetailPageState createState() => _DetailPageState();
+  _DetailPageState createState() => _DetailPageState(resale: resale);
 }
 
 class _DetailPageState extends State<DetailPage> {
+  final ResaleModel resale;
+  int totalProduct = 1;
+  double totalProductPrice;
+
+  _DetailPageState({@required this.resale}) : totalProductPrice = resale.price;
+
   var appBar = AppBar(
     title: Text('Selecionar Produtos'),
     actions: <Widget>[
@@ -22,6 +38,21 @@ class _DetailPageState extends State<DetailPage> {
       )
     ],
   );
+
+  void addProduct() {
+    setState(() {
+      totalProduct++;
+      totalProductPrice = resale.price * totalProduct;
+    });
+  }
+
+  void removeProduct() {
+    if (totalProduct > 0)
+      setState(() {
+        totalProduct--;
+        totalProductPrice = resale.price * totalProduct;
+      });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,29 +133,23 @@ class _DetailPageState extends State<DetailPage> {
             width: 30,
             height: 30,
             decoration: BoxDecoration(
-              color: Colors.orange,
+              color: Color(int.parse('FF${resale.color}', radix: 16)),
               borderRadius: BorderRadius.circular(100),
             ),
-            child: Center(child: Text('1')),
+            child: Center(
+              child: Text(
+                totalProduct.toString(),
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Text('Supergasbras - Botijão de 13Kg'),
+              padding: const EdgeInsets.only(left: 10.0),
+              child: Text('${resale.name} - Botijão de 13Kg'),
             ),
           ),
-          RichText(
-            text: TextSpan(style: TextStyle(color: Colors.black), children: [
-              TextSpan(
-                text: 'R\$',
-                style: TextStyle(fontSize: 10),
-              ),
-              TextSpan(
-                text: '73,99',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ]),
-          ),
+          ValueAnimation(value: totalProductPrice),
         ],
       ),
     );
@@ -158,12 +183,12 @@ class _DetailPageState extends State<DetailPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text('Chama Gás'),
+                      Text(resale.name),
                       SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
-                          Text('5,0'),
+                          Text(resale.note.toString()),
                           SizedBox(width: 5),
                           Icon(
                             Icons.star,
@@ -172,7 +197,7 @@ class _DetailPageState extends State<DetailPage> {
                           ),
                           Expanded(
                             child: Text(
-                              '15-30 min', 
+                              '${resale.averageTime} min',
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -189,13 +214,11 @@ class _DetailPageState extends State<DetailPage> {
                   children: <Widget>[
                     Container(
                       padding: EdgeInsets.all(5),
-                      color: Colors.orange,
-                      child: Text('Supergasbras'),
-                    ),
-                    SizedBox(height: 5),
-                    Text(
-                      'aberto até às 17:40',
-                      style: TextStyle(fontSize: 10),
+                      color: Color(int.parse('FF${resale.color}', radix: 16)),
+                      child: Text(
+                        resale.type,
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ],
                 ),
@@ -215,23 +238,9 @@ class _DetailPageState extends State<DetailPage> {
                     children: <Widget>[
                       Text('Botijão de 13Kg'),
                       SizedBox(height: 5),
-                      Text('Supergasbras'),
+                      Text(resale.name),
                       SizedBox(height: 5),
-                      RichText(
-                        text: TextSpan(
-                            style: TextStyle(color: Colors.black),
-                            children: [
-                              TextSpan(
-                                text: 'R\$',
-                                style: TextStyle(fontSize: 10),
-                              ),
-                              TextSpan(
-                                text: '73,99',
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
-                            ]),
-                      ),
+                      ValueAnimation(value: totalProductPrice)
                     ],
                   ),
                 ),
@@ -239,15 +248,18 @@ class _DetailPageState extends State<DetailPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      Container(
-                        height: 30,
-                        width: 30,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: Colors.grey,
-                        ),
-                        child: Center(
-                          child: Icon(Icons.remove),
+                      GestureDetector(
+                        onTap: () => removeProduct(),
+                        child: Container(
+                          height: 30,
+                          width: 30,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: Colors.grey,
+                          ),
+                          child: Center(
+                            child: Icon(Icons.remove),
+                          ),
                         ),
                       ),
                       Container(
@@ -264,21 +276,29 @@ class _DetailPageState extends State<DetailPage> {
                             padding: EdgeInsets.all(4),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(100),
-                              color: Colors.orange,
+                              color: Color(
+                                int.parse('FF${resale.color}', radix: 16),
+                              ),
                             ),
-                            child: Text('1'),
+                            child: Text(
+                              totalProduct.toString(),
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         ),
                       ),
-                      Container(
-                        height: 30,
-                        width: 30,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: Colors.grey,
-                        ),
-                        child: Center(
-                          child: Icon(Icons.add),
+                      GestureDetector(
+                        onTap: () => addProduct(),
+                        child: Container(
+                          height: 30,
+                          width: 30,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: Colors.grey,
+                          ),
+                          child: Center(
+                            child: Icon(Icons.add),
+                          ),
                         ),
                       ),
                     ],
