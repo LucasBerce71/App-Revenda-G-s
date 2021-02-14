@@ -4,7 +4,7 @@
 
 <h3 align="center">
 
-Revenda Gás é um projeto **APP** desenvolvido no bootcamp **Acadêmia do Flutter** guiado por**[Rodrigo Rahman]** utilizando as tecnologias ***Dart, e Flutter***.
+Revenda Gás é um projeto **APP** desenvolvido no bootcamp **Acadêmia do Flutter** guiado por **[Rodrigo Rahman]** utilizando as tecnologias ***Dart, e Flutter***.
 
 </h3>
 
@@ -17,8 +17,10 @@ O projeto tem como finalidade **melhorar meus conhecimentos** nas tecnologias **
 ## **:computer: TECNOLOGIAS**
 
 
-#### **Mobile** ([Dart][dart] + [Flutter][flutter])
+#### **Mobile** 
 
+  - **[DART]**
+  - **[FLUTTER]**
   - **[JSON]**
 ## **:wine_glass: COMO UTILIZAR**
 
